@@ -1,0 +1,12 @@
+<ul class="nav nav-pills justify-content-end">
+  <li class="nav-item">
+    <a [routerLink] = "['/admin', 'dashboard']" class="nav-link" routerLinkActive="active">Dashboard</a>
+  </li>
+  <li class="nav-item">
+    <a [routerLink] = "['/admin', 'login']" class="nav-link" routerLinkActive="active">Войти</a>
+  </li>
+  <li class="nav-item">
+    <a href="#" (click)="logout($event)" class="nav-link" routerLinkActive="active">Выйти</a>
+  </li>
+</ul>
+<router-outlet></router-outlet>

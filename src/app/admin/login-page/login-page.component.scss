@@ -1,0 +1,16 @@
+.formdiv{
+  border: blanchedalmond solid 1px;
+  border-radius: .5rem;
+  margin-top: 20%;
+  padding: 10px;
+  .validation{
+    color: red;
+  }
+  .invalid{
+    border: red solid .25px;
+    border-radius: .5rem;
+  }
+  input{
+    border-radius: .5rem;
+  }
+}

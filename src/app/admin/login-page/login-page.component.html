@@ -1,4 +1,4 @@
-<div class="formdiv">
+<div *ngIf="!this.auth.isAuthenticated()" class="formdiv">
   <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-group">
       <label for="email">Email</label>
@@ -30,6 +30,6 @@
         </small>
       </div>
     </div>
-    <button type="submit" class="btn btn-outline-info" [disabled]="form.invalid">Войти</button>
+    <button type="submit" class="btn btn-outline-info" [disabled]="form.invalid || this.submited">Войти</button>
   </form>
 </div>

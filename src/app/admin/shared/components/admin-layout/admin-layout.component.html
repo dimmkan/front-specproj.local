@@ -1,13 +1,13 @@
 <nav class="navbar">
-  <h2>Admin panel</h2>
+  <h2>Панель администратора</h2>
   <ul class="nav nav-pills">
     <li class="nav-item">
-      <a [routerLink]="['/']" class="nav-link" routerLinkActive="active">На главную</a>
+      <a [routerLink]="['/']" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact:this.auth.isAuthenticated()}">На главную</a>
     </li>
-    <li *ngIf="isAuth" class="nav-item">
+    <li *ngIf="this.auth.isAuthenticated()" class="nav-item">
       <a [routerLink]="['/admin', 'dashboard']" class="nav-link" routerLinkActive="active">Dashboard</a>
     </li>
-    <li *ngIf="isAuth" class="nav-item">
+    <li *ngIf="this.auth.isAuthenticated()" class="nav-item">
       <a href="#" (click)="logout($event)" class="nav-link" routerLinkActive="active">Выйти</a>
     </li>
   </ul>

@@ -61,9 +61,7 @@ export class AuthService {
   //@ts-ignore
   private setToken(response: AuthResponse | null) {
     if(response){
-      const expDate = new Date(new Date().getTime() + +response.expiresIn * 1000)
       localStorage.setItem('bearer-token', response.token)
-      localStorage.setItem('bearer-token-expires', expDate.toString())
     }else{
       localStorage.clear()
     }

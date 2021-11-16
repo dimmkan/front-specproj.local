@@ -5,6 +5,8 @@ import {AdminLayoutComponent} from "./shared/components/admin-layout/admin-layou
 import {LoginPageComponent} from "./login-page/login-page.component";
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {AuthService} from "./shared/services/auth.service";
+import {SharedModule} from "../shared/shared.module";
 
 
 
@@ -26,8 +28,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
           {path:'dashboard', component:DashboardPageComponent}
         ]
       }
-    ])
+    ]),
+    SharedModule
   ],
-  exports:[RouterModule]
+  exports:[RouterModule],
+  providers: [AuthService]
 })
 export class AdminModule { }

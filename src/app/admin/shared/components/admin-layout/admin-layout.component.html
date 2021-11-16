@@ -1,11 +1,18 @@
-<ul class="nav nav-pills justify-content-end">
-  <li *ngIf="isAuth" class="nav-item">
-    <a [routerLink] = "['/admin', 'dashboard']" class="nav-link" routerLinkActive="active">Dashboard</a>
-  </li>
-  <li *ngIf="isAuth" class="nav-item">
-    <a href="#" (click)="logout($event)" class="nav-link" routerLinkActive="active">Выйти</a>
-  </li>
-</ul>
+<nav class="navbar">
+  <h2>Admin panel</h2>
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a [routerLink]="['/']" class="nav-link" routerLinkActive="active">На главную</a>
+    </li>
+    <li *ngIf="isAuth" class="nav-item">
+      <a [routerLink]="['/admin', 'dashboard']" class="nav-link" routerLinkActive="active">Dashboard</a>
+    </li>
+    <li *ngIf="isAuth" class="nav-item">
+      <a href="#" (click)="logout($event)" class="nav-link" routerLinkActive="active">Выйти</a>
+    </li>
+  </ul>
+</nav>
+
 <div class="container">
   <router-outlet></router-outlet>
 </div>

@@ -7,6 +7,7 @@ import { DashboardPageComponent } from './dashboard-page/dashboard-page.componen
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AuthService} from "./shared/services/auth.service";
 import {SharedModule} from "../shared/shared.module";
+import {AuthGuard} from "./shared/services/auth.guard";
 
 
 
@@ -25,13 +26,13 @@ import {SharedModule} from "../shared/shared.module";
         path:'', component:AdminLayoutComponent, children:[
           {path:'', redirectTo: '/admin/login', pathMatch:'full'},
           {path:'login', component:LoginPageComponent},
-          {path:'dashboard', component:DashboardPageComponent}
+          {path:'dashboard', component:DashboardPageComponent, canActivate:[AuthGuard]}
         ]
       }
     ]),
     SharedModule
   ],
   exports:[RouterModule],
-  providers: [AuthService]
+  providers: [AuthService, AuthGuard]
 })
 export class AdminModule { }

@@ -10,10 +10,10 @@ export class AuthService {
 
   public error$: Subject<string> = new Subject<string>()
 
-  get token(): string{
-    if(!localStorage.getItem('bearer-token')) return null
-    const expDate =  new Date(JSON.parse(atob(localStorage.getItem('bearer-token').split('.')[1])).exp.toString())
-    if (new Date() > expDate){
+  get token(): string {
+    if (!localStorage.getItem('bearer-token')) return null
+    const expDate = new Date(JSON.parse(atob(localStorage.getItem('bearer-token').split('.')[1])).exp.toString())
+    if (new Date() > expDate) {
       this.logout()
       return null
     }
@@ -21,7 +21,8 @@ export class AuthService {
   }
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   login(user: User): Observable<any> {
 
@@ -34,7 +35,7 @@ export class AuthService {
       )
   }
 
-  logout(){
+  logout() {
     this.setToken(null)
   }
 
@@ -44,7 +45,7 @@ export class AuthService {
 
   private handleError(error: HttpErrorResponse) {
     const {message} = error.error
-    switch (message){
+    switch (message) {
       case 'Email error':
         this.error$.next('Неверный e-mail')
         break
@@ -60,9 +61,11 @@ export class AuthService {
 
   //@ts-ignore
   private setToken(response: AuthResponse | null) {
-    if(response){
+    if (response) {
+      console.log(1)
       localStorage.setItem('bearer-token', response.token)
-    }else{
+    } else {
+      console.log(2)
       localStorage.clear()
     }
   }

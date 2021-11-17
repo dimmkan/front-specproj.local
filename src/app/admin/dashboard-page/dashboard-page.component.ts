@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardPageComponent implements OnInit {
 
+  active = 'top';
+
   constructor() { }
 
   ngOnInit(): void {

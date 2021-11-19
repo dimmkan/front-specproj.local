@@ -4,6 +4,7 @@ import {User} from "../../../shared/interfaces/user";
 import {Observable, Subject, throwError} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
 import {AuthResponse} from "../../../shared/interfaces/authResponse";
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 @Injectable()
 export class AuthService {
@@ -11,13 +12,12 @@ export class AuthService {
   public error$: Subject<string> = new Subject<string>()
 
   get token(): string {
-    if (!localStorage.getItem('bearer-token')) return null
-    const expDate = new Date(JSON.parse(atob(localStorage.getItem('bearer-token').split('.')[1])).exp.toString())
-    if (new Date() > expDate) {
+    const helper = new JwtHelperService();
+    if (helper.isTokenExpired(localStorage.getItem('access_token'))) {
       this.logout()
       return null
     }
-    return localStorage.getItem('bearer-token')
+    return localStorage.getItem('access_token')
   }
 
 
@@ -62,10 +62,8 @@ export class AuthService {
   //@ts-ignore
   private setToken(response: AuthResponse | null) {
     if (response) {
-      console.log(1)
-      localStorage.setItem('bearer-token', response.token)
+      localStorage.setItem('access_token', response.token)
     } else {
-      console.log(2)
       localStorage.clear()
     }
   }

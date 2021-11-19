@@ -1,33 +1,33 @@
 <div class="d-flex">
   <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills" orientation="vertical">
-    <li ngbNavItem="users">
+    <li ngbNavItem="user" (click)="loaddata()">
       <a ngbNavLink>Пользователи</a>
       <ng-template ngbNavContent>
-        <div>
-          <p>Здесь будет информация о пользователях</p>
+        <div class="nav-content container-fluid">
+          <app-users-table></app-users-table>
         </div>
       </ng-template>
     </li>
-    <li ngbNavItem="filials">
+    <li ngbNavItem="filial" (click)="loaddata()">
       <a ngbNavLink>Филиалы</a>
       <ng-template ngbNavContent>
-        <div>
+        <div class="nav-content container-fluid">
           <p>Здесь будет информация о филиалах</p>
         </div>
       </ng-template>
     </li>
-    <li ngbNavItem="doctors">
+    <li ngbNavItem="doctor" (click)="loaddata()">
       <a ngbNavLink>Доктора</a>
       <ng-template ngbNavContent>
-        <div>
+        <div class="nav-content container-fluid">
           <p>Здесь будет информация о врачах</p>
         </div>
       </ng-template>
     </li>
-    <li ngbNavItem="pacients">
+    <li ngbNavItem="pacient" (click)="loaddata()">
       <a ngbNavLink>Пациенты</a>
       <ng-template ngbNavContent>
-        <div>
+        <div class="nav-content container-fluid">
           <p>Здесь будет информация о пациентах</p>
         </div>
       </ng-template>

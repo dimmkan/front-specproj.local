@@ -1,0 +1,21 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">E-Mail</th>
+    <th scope="col">Роль</th>
+    <th scope="col">Номер филиала</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users">
+    <th scope="row">{{ user.id }}</th>
+    <td>
+      {{ user.email }}
+    </td>
+    <td>{{ user.role }}</td>
+    <td>{{ user.filialID }}</td>
+  </tr>
+  </tbody>
+</table>
+

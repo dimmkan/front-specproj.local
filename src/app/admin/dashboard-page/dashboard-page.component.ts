@@ -12,7 +12,7 @@ export class DashboardPageComponent implements OnInit {
   active = 'user';
 
   constructor(
-    private auth: AuthService,
+    public auth: AuthService,
     private router: Router
   ) { }
 

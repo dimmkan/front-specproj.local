@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex" *ngIf="this.auth.isAuthenticated()">
   <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills" orientation="vertical">
     <li ngbNavItem="user" (click)="loaddata()">
       <a ngbNavLink>Пользователи</a>

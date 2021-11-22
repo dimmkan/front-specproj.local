@@ -1,6 +1,17 @@
-import {Component, Directive, Input, OnInit, Output, EventEmitter, ViewChildren, QueryList} from '@angular/core';
+import {
+  Component,
+  Directive,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChildren,
+  QueryList,
+  ElementRef
+} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../shared/services/auth.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 interface UserTable {
   id: number;
@@ -11,7 +22,7 @@ interface UserTable {
 
 export type SortColumn = keyof UserTable | '';
 export type SortDirection = 'asc' | 'desc' | '';
-const rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
+const rotate: { [key: string]: SortDirection } = {'asc': 'desc', 'desc': '', '': 'asc'};
 
 const compare = (v1: string | number, v2: string | number) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
@@ -31,7 +42,7 @@ export interface SortEvent {
 export class UserTableSortableHeader {
   @Input() sortable: SortColumn = '';
   @Input() direction: SortDirection = '';
-  @Output() sort:EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
+  @Output() sort: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
 
   rotate() {
     this.direction = rotate[this.direction];
@@ -48,6 +59,7 @@ export class UsersTableComponent implements OnInit {
 
   users: UserTable[] = []
   refresh: UserTable[] = []
+  openedUser: UserTable
 
   @ViewChildren(UserTableSortableHeader) headers: QueryList<UserTableSortableHeader>;
   collectionSize: number;
@@ -57,14 +69,15 @@ export class UsersTableComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private auth: AuthService
+    private auth: AuthService,
+    private modalService: NgbModal,
   ) {
     this.reloadUsers()
   }
 
   private reloadUsers() {
-    this.http.get<UserTable[]>('http://back-specporj.local:8000/api/user', {headers: {'Authorization': 'Bearer '+this.auth.token}})
-      .subscribe(response =>{
+    this.http.get<UserTable[]>('http://back-specporj.local:8000/api/user', {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(response => {
         //@ts-ignore
         this.users = response.users
         this.collectionSize = this.users.length
@@ -96,5 +109,15 @@ export class UsersTableComponent implements OnInit {
 
   refreshUsers() {
     this.refresh = [...this.users].slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize)
+  }
+
+  openUser(id: number, content: any) {
+    this.http.get<UserTable>(`http://back-specporj.local:8000/api/user/${id}`, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(response => {
+        //@ts-ignore
+        this.openedUser = response.user
+        this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      })
+
   }
 }

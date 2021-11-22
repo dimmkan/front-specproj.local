@@ -12,7 +12,6 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {UsersTableModule} from "./dashboard-page/users-table/users-table.component.module";
 
 
-
 @NgModule({
   declarations: [
     AdminLayoutComponent,

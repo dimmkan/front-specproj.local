@@ -10,7 +10,7 @@ import {SharedModule} from "../shared/shared.module";
 import {AuthGuard} from "./shared/services/auth.guard";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {UsersTableModule} from "./dashboard-page/users-table/users-table.component.module";
-import {UserTableSortableHeader} from "./dashboard-page/users-table/users-table.component";
+
 
 
 @NgModule({

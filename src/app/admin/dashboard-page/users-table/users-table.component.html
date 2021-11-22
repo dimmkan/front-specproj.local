@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr class="table-info" *ngFor="let user of users">
+    <tr class="table-info" *ngFor="let user of refresh">
       <th scope="row">{{ user.id }}</th>
       <td>
         {{ user.email }}
@@ -19,4 +19,14 @@
     </tr>
     </tbody>
   </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshUsers()">
+    </ngb-pagination>
+
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshUsers()">
+      <option [ngValue]="5">На странице: 5</option>
+      <option [ngValue]="10">На странице: 10</option>
+      <option [ngValue]="25">На странице: 25</option>
+    </select>
+  </div>
 </div>

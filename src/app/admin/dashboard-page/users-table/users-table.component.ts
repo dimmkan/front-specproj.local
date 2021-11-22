@@ -44,12 +44,16 @@ export class UserTableSortableHeader {
   templateUrl: './users-table.component.html',
   styleUrls: ['./users-table.component.scss']
 })
-
 export class UsersTableComponent implements OnInit {
 
   users: UserTable[] = []
+  refresh: UserTable[] = []
 
   @ViewChildren(UserTableSortableHeader) headers: QueryList<UserTableSortableHeader>;
+  collectionSize: number;
+  page: number = 1;
+  pageSize: number = 5;
+
 
   constructor(
     private http: HttpClient,
@@ -63,6 +67,8 @@ export class UsersTableComponent implements OnInit {
       .subscribe(response =>{
         //@ts-ignore
         this.users = response.users
+        this.collectionSize = this.users.length
+        this.refresh = [...this.users].slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize)
       })
   }
 
@@ -79,13 +85,16 @@ export class UsersTableComponent implements OnInit {
     });
 
     if (direction === '' || column === '') {
-      this.reloadUsers();
+      this.refreshUsers()
     } else {
-      this.users = [...this.users].sort((a, b) => {
+      this.refresh = [...this.refresh].sort((a, b) => {
         const res = compare(a[column], b[column]);
         return direction === 'asc' ? res : -res;
       });
     }
   }
 
+  refreshUsers() {
+    this.refresh = [...this.users].slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize)
+  }
 }

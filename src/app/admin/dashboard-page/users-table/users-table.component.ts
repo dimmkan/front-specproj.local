@@ -12,12 +12,21 @@ import {
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../shared/services/auth.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 interface UserTable {
   id: number;
   email: string;
+  password: string;
   role: string;
   filialID?: number;
+}
+
+interface FilialTable {
+  id: number;
+  description: string;
+  address: string;
+  city: string;
 }
 
 export type SortColumn = keyof UserTable | '';
@@ -57,14 +66,19 @@ export class UserTableSortableHeader {
 })
 export class UsersTableComponent implements OnInit {
 
+  //@ts-ignore
+  userForm: FormGroup
+
   users: UserTable[] = []
   refresh: UserTable[] = []
   openedUser: UserTable
+  filials: FilialTable[] = []
 
   @ViewChildren(UserTableSortableHeader) headers: QueryList<UserTableSortableHeader>;
   collectionSize: number;
   page: number = 1;
   pageSize: number = 5;
+
 
 
   constructor(
@@ -73,6 +87,7 @@ export class UsersTableComponent implements OnInit {
     private modalService: NgbModal,
   ) {
     this.reloadUsers()
+    this.loadFilials()
   }
 
   private reloadUsers() {
@@ -85,8 +100,22 @@ export class UsersTableComponent implements OnInit {
       })
   }
 
-  ngOnInit(): void {
+  private loadFilials() {
+    this.http.get<FilialTable[]>('http://back-specporj.local:8000/api/filial', {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(response => {
+        //@ts-ignore
+        this.filials = response.filials
+      })
+  }
 
+  ngOnInit(): void {
+    this.userForm = new FormGroup({
+      id: new FormControl(null),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl(''),
+      role: new FormControl('', Validators.required),
+      filialID: new FormControl(null),
+    })
   }
 
   onSort({column, direction}: SortEvent) {
@@ -119,5 +148,27 @@ export class UsersTableComponent implements OnInit {
         this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       })
 
+  }
+
+
+  submitUserModal() {
+    const formData = <UserTable>{...this.userForm.value}
+    // Если меняется пароль пользователя - перезаписываем данные пользователя безусловно
+    if(formData.password !== '') {
+      this.http.put(`http://back-specporj.local:8000/api/user/${formData.id}`, formData, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+        .subscribe(() => {
+          this.reloadUsers()
+          this.userForm.reset()
+        })
+    // Если пароль не менялся - проверим изменения основных полей и если они не поменялись - не будем перезаписывать
+    }else if (formData.email !== this.openedUser.email || formData.role !== this.openedUser.role || formData.filialID !== this.openedUser.filialID) {
+      delete formData.password
+      console.log('edit')
+      this.http.put(`http://back-specporj.local:8000/api/user/${formData.id}`, formData, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+        .subscribe(() => {
+          this.reloadUsers()
+          this.userForm.reset()
+        })
+    }
   }
 }

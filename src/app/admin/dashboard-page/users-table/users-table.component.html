@@ -10,7 +10,7 @@
     </thead>
     <tbody>
     <tr class="table-info" *ngFor="let user of refresh">
-      <th class="btn-link" style="cursor: pointer" scope="row" (click)="openUser(user.id, content)">{{ user.id }}</th>
+      <th class="btn-link" style="cursor: pointer" scope="row" (click)="openUser(user.id, userM)">{{ user.id }}</th>
       <td>
         {{ user.email }}
       </td>
@@ -32,42 +32,60 @@
   </div>
 </div>
 
-<ng-template #content let-modal>
+<ng-template #userM let-userModal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Карточка пользователя</h4>
-    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="modal.dismiss()">
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="userModal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="userForm" (ngSubmit)="submitUserModal(); userModal.close()">
       <div class="form-group row">
         <label for="id" class="col-sm-3 col-form-label">ID пользователя</label>
         <div class="col-sm-9">
-          <input type="text" class="form-control" id="id" placeholder="ID пользователя" readonly value="{{openedUser.id}}">
+          <input formControlName="id" type="text" class="form-control" id="id" placeholder="ID пользователя" readonly
+                 [ngModel]="openedUser.id">
         </div>
       </div>
       <div class="form-group row">
         <label for="email" class="col-sm-3 col-form-label">Email пользователя</label>
         <div class="col-sm-9">
-          <input type="text" class="form-control" id="email" placeholder="Email пользователя" readonly value="{{openedUser.email}}">
+          <input formControlName="email" type="text" class="form-control" id="email" placeholder="Email пользователя"
+                 [ngModel]="openedUser.email">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="password" class="col-sm-3 col-form-label">Новый пароль</label>
+        <div class="col-sm-9">
+          <input type="password" class="form-control" id="password" placeholder="Новый пароль"
+                 formControlName="password">
         </div>
       </div>
       <div class="form-group row">
         <label for="role" class="col-sm-3 col-form-label">Роль пользователя</label>
         <div class="col-sm-9">
-          <input type="text" class="form-control" id="role" placeholder="Роль пользователя" readonly value="{{openedUser.role}}">
+          <select formControlName="role" id="role" class="custom-select" style="width: auto"
+                  [ngModel]="openedUser.role">
+            <option [value]="'user'">User</option>
+            <option [value]="'superuser'">Superuser</option>
+            <option [value]="'admin'">Admin</option>
+          </select>
         </div>
       </div>
+
       <div class="form-group row">
         <label for="filialID" class="col-sm-3 col-form-label">Филиал пользователя</label>
         <div class="col-sm-9">
-          <input type="text" class="form-control" id="filialID" placeholder="Филиал пользователя" readonly value="{{openedUser.filialID}}">
+          <select formControlName="filialID" id="filialID" class="custom-select" style="width: auto"
+                  [ngModel]="openedUser.filialID">
+            <option *ngFor="let fil of filials" [ngValue]="fil.id">{{fil.description}}</option>
+          </select>
         </div>
       </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark">Сохранить изменения</button>
+      </div>
     </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Закрыть</button>
   </div>
 </ng-template>

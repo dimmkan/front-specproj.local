@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {UsersTableComponent, UserTableSortableHeader} from './users-table.component'
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
-  imports: [CommonModule, NgbModule, FormsModule],
+  imports: [CommonModule, NgbModule, FormsModule, ReactiveFormsModule],
   declarations: [UsersTableComponent, UserTableSortableHeader],
   exports: [UsersTableComponent],
   bootstrap: [UsersTableComponent]

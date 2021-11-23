@@ -1,15 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FilialsTableComponent } from './filials-table.component';
+import {FilialsTableComponent, FilialsTableSortableHeader} from './filials-table.component';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 
 @NgModule({
   declarations: [
-    FilialsTableComponent
+    FilialsTableComponent,
+    FilialsTableSortableHeader,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NgbModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     FilialsTableComponent

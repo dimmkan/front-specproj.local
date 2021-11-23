@@ -1,1 +1,117 @@
-<p>filials-table works!</p>
+<div class="prettyfire">
+  <div class="offset-11 mb-1">
+    <button type="button" class="btn btn-info" (click)="openAdd(addM)">Добавить филиал</button>
+  </div>
+  <table class="table table-bordered">
+    <thead class="thead-light">
+    <tr>
+      <th scope="col" sortable="id" (sort)="onSort($event)">ID</th>
+      <th scope="col" sortable="description" (sort)="onSort($event)">Наименование филиала</th>
+      <th scope="col" sortable="address" (sort)="onSort($event)">Адрес филиала</th>
+      <th scope="col" sortable="city" (sort)="onSort($event)">Город филиала</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="table-info" *ngFor="let filial of refresh">
+      <th class="btn-link" style="cursor: pointer" scope="row" (click)="openFilial(filial.id, filialM)">{{ filial.id }}</th>
+      <td>{{ filial.description }}</td>
+      <td>{{ filial.address }}</td>
+      <td>{{ filial.city }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+                    (pageChange)="refreshFilials()">
+    </ngb-pagination>
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshFilials()">
+      <option [ngValue]="5">На странице: 5</option>
+      <option [ngValue]="10">На странице: 10</option>
+      <option [ngValue]="25">На странице: 25</option>
+    </select>
+  </div>
+</div>
+
+<ng-template #filialM let-filialModal>
+  <div class="modal-header">
+    <h4 class="modal-title">Карточка филиала</h4>
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="filialModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="filialForm" (ngSubmit)="submitFilialModal(); filialModal.close()">
+      <div class="form-group row">
+        <label for="id" class="col-sm-3 col-form-label">ID филиала</label>
+        <div class="col-sm-9">
+          <input formControlName="id" type="text" class="form-control" id="id" placeholder="ID филиала" readonly
+                 [ngModel]="openedFilial.id">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="description" class="col-sm-3 col-form-label">Наименование филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="description" class="form-control" id="description" placeholder="Наименование филиала"
+                    [ngModel]="openedFilial.description">
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="address" class="col-sm-3 col-form-label">Адрес филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="address" class="form-control" id="address" placeholder="Адрес филиала"
+                    [ngModel]="openedFilial.address">
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="city" class="col-sm-3 col-form-label">Город филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="city" class="form-control" id="city" placeholder="Город филиала"
+                    [ngModel]="openedFilial.city">
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" [disabled]="filialForm.invalid">Сохранить филиал</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #addM let-filialAdd>
+  <div class="modal-header">
+    <h4 class="modal-title">Карточка филиала</h4>
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="filialAdd.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="filialAddForm" (ngSubmit)="addFilialModal(); filialAdd.close()">
+      <div class="form-group row">
+        <label for="add_description" class="col-sm-3 col-form-label">Наименование филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="add_description" class="form-control" id="add_description" placeholder="Наименование филиала">
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="add_address" class="col-sm-3 col-form-label">Адрес филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="add_address" class="form-control" id="add_address" placeholder="Адрес филиала">
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="add_city" class="col-sm-3 col-form-label">Город филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="add_city" class="form-control" id="add_city" placeholder="Город филиала">
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" [disabled]="filialAddForm.invalid">Добавить филиал</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -1,5 +1,5 @@
 <div class="prettyfire">
-  <div class="offset-10 mb-1">
+  <div class="offset-11 mb-1">
     <button type="button" class="btn btn-info" (click)="openAdd(userAdd)">Добавить пользователя</button>
   </div>
   <table class="table table-bordered">
@@ -87,7 +87,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-dark">Сохранить изменения</button>
+        <button type="submit" class="btn btn-outline-dark" [disabled]="userForm.invalid">Сохранить изменения</button>
       </div>
     </form>
   </div>
@@ -136,7 +136,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="filialModal.close()">Закрыть карточку</button>
+        <button type="button" class="btn btn-outline-dark" (click)="filialModal.close()" [disabled]="filialForm.invalid">Закрыть карточку</button>
       </div>
     </form>
   </div>
@@ -184,7 +184,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-dark">Записать пользователя</button>
+        <button type="submit" class="btn btn-outline-dark" [disabled]="newUserForm.invalid">Записать пользователя</button>
       </div>
     </form>
   </div>

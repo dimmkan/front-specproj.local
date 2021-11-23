@@ -13,6 +13,7 @@ import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../shared/services/auth.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FilialTable} from "../../shared/interfaces";
 
 interface UserTable {
   id: number;
@@ -20,13 +21,6 @@ interface UserTable {
   password: string;
   role: string;
   filialID?: number;
-}
-
-interface FilialTable {
-  id: number;
-  description: string;
-  address: string;
-  city: string;
 }
 
 export type SortColumn = keyof UserTable | '';

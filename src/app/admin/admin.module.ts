@@ -10,6 +10,7 @@ import {SharedModule} from "../shared/shared.module";
 import {AuthGuard} from "./shared/services/auth.guard";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {UsersTableModule} from "./dashboard-page/users-table/users-table.component.module";
+import {FilialsTableComponentModule} from "./dashboard-page/filials-table/filials-table.component.module";
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {UsersTableModule} from "./dashboard-page/users-table/users-table.compone
                 ]
             }
         ]),
-        SharedModule
+        SharedModule,
+        FilialsTableComponentModule
     ],
   exports:[RouterModule],
   providers: [AuthService, AuthGuard]

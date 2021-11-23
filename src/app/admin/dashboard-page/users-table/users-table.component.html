@@ -15,7 +15,7 @@
         {{ user.email }}
       </td>
       <td>{{ user.role }}</td>
-      <td>{{ user.filialID }}</td>
+      <td class="btn-link" style="cursor: pointer" scope="row" (click)="openFilial(user.filialID, filialM)">{{ user.filialID }}</td>
     </tr>
     </tbody>
   </table>
@@ -85,6 +85,55 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-outline-dark">Сохранить изменения</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #filialM let-filialModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Карточка филиала</h4>
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="filialModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="filialForm">
+      <div class="form-group row">
+        <label for="filial_id" class="col-sm-3 col-form-label">ID филиала</label>
+        <div class="col-sm-9">
+          <input formControlName="filial_id" type="text" class="form-control" id="filial_id" placeholder="ID филиала" readonly
+                 [ngModel]="openedFilial.id">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="filial_description" class="col-sm-3 col-form-label">Наименование филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="filial_description" class="form-control" id="filial_description" placeholder="Наименование филиала"
+                    [ngModel]="openedFilial.description" readonly>
+
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="filial_address" class="col-sm-3 col-form-label">Адрес филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="filial_address" class="form-control" id="filial_address" placeholder="Адрес филиала"
+                    [ngModel]="openedFilial.address" readonly>
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="filial_city" class="col-sm-3 col-form-label">Город филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="filial_city" class="form-control" id="filial_city" placeholder="Город филиала"
+                    [ngModel]="openedFilial.city" readonly>
+
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="filialModal.close()">Закрыть карточку</button>
       </div>
     </form>
   </div>

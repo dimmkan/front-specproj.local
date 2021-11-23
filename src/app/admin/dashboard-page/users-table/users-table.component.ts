@@ -7,7 +7,7 @@ import {
   EventEmitter,
   ViewChildren,
   QueryList,
-  ElementRef
+  ElementRef, TemplateRef
 } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../shared/services/auth.service";
@@ -68,11 +68,14 @@ export class UsersTableComponent implements OnInit {
 
   //@ts-ignore
   userForm: FormGroup
+  //@ts-ignore
+  filialForm: FormGroup
 
   users: UserTable[] = []
   refresh: UserTable[] = []
   openedUser: UserTable
   filials: FilialTable[] = []
+  openedFilial: FilialTable
 
   @ViewChildren(UserTableSortableHeader) headers: QueryList<UserTableSortableHeader>;
   collectionSize: number;
@@ -116,10 +119,15 @@ export class UsersTableComponent implements OnInit {
       role: new FormControl('', Validators.required),
       filialID: new FormControl(null),
     })
+    this.filialForm = new FormGroup({
+      filial_id: new FormControl(null),
+      filial_description: new FormControl(''),
+      filial_address: new FormControl(''),
+      filial_city: new FormControl(''),
+    })
   }
 
   onSort({column, direction}: SortEvent) {
-
     this.headers.forEach(header => {
       if (header.sortable !== column) {
         header.direction = '';
@@ -147,7 +155,6 @@ export class UsersTableComponent implements OnInit {
         this.openedUser = response.user
         this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       })
-
   }
 
 
@@ -163,12 +170,20 @@ export class UsersTableComponent implements OnInit {
     // Если пароль не менялся - проверим изменения основных полей и если они не поменялись - не будем перезаписывать
     }else if (formData.email !== this.openedUser.email || formData.role !== this.openedUser.role || formData.filialID !== this.openedUser.filialID) {
       delete formData.password
-      console.log('edit')
       this.http.put(`http://back-specporj.local:8000/api/user/${formData.id}`, formData, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
         .subscribe(() => {
           this.reloadUsers()
           this.userForm.reset()
         })
     }
+  }
+
+  openFilial(filialID: any, filialM: TemplateRef<any>) {
+    this.http.get<FilialTable>(`http://back-specporj.local:8000/api/filial/${filialID}`, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(response => {
+        //@ts-ignore
+        this.openedFilial = response.filial
+        this.modalService.open(filialM, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      })
   }
 }

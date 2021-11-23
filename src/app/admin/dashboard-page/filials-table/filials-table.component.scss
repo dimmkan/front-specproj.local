@@ -49,3 +49,9 @@ textarea {
     border: 1px solid green;
   }
 }
+
+ngb-pagination ::ng-deep .page-item.active .page-link {
+  border-color: #17a2b8;
+  background-color: #17a2b8;
+}
+

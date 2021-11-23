@@ -66,10 +66,9 @@ export class UserTableSortableHeader {
 })
 export class UsersTableComponent implements OnInit {
 
-  //@ts-ignore
   userForm: FormGroup
-  //@ts-ignore
   filialForm: FormGroup
+  newUserForm: FormGroup
 
   users: UserTable[] = []
   refresh: UserTable[] = []
@@ -124,6 +123,13 @@ export class UsersTableComponent implements OnInit {
       filial_description: new FormControl(''),
       filial_address: new FormControl(''),
       filial_city: new FormControl(''),
+    })
+
+    this.newUserForm = new FormGroup({
+      n_email: new FormControl('', [Validators.required, Validators.email]),
+      n_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      n_role: new FormControl(null, Validators.required),
+      n_filialID: new FormControl(null),
     })
   }
 
@@ -185,5 +191,23 @@ export class UsersTableComponent implements OnInit {
         this.openedFilial = response.filial
         this.modalService.open(filialM, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       })
+  }
+
+  addUserModal() {
+    const formData = {...this.newUserForm.value}
+    this.http.post(`http://back-specporj.local:8000/api/user`, {
+      email: formData.n_email,
+      password: formData.n_password,
+      role: formData.n_role,
+      filialID: formData.n_filialID,
+    },{headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(() => {
+        this.reloadUsers()
+        this.newUserForm.reset()
+      })
+  }
+
+  openAdd(userAdd: TemplateRef<any>) {
+    this.modalService.open(userAdd, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
   }
 }

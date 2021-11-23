@@ -25,4 +25,14 @@ th[sortable].desc:before, th[sortable].asc:before {
   margin-left: -22px;
 }
 
+input {
+  font-size: 14px !important;
+  &.ng-invalid.ng-touched {
+    border: 1px solid red;
+  }
+
+  &.ng-valid.ng-touched {
+    border: 1px solid green;
+  }
+}
 

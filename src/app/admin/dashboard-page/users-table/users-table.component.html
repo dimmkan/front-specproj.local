@@ -87,6 +87,7 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="openDeleteModal(deleteWindow); userModal.close()">Удалить</button>
         <button type="submit" class="btn btn-outline-dark" [disabled]="userForm.invalid">Сохранить изменения</button>
       </div>
     </form>
@@ -187,5 +188,23 @@
         <button type="submit" class="btn btn-outline-dark" [disabled]="newUserForm.invalid">Записать пользователя</button>
       </div>
     </form>
+  </div>
+</ng-template>
+
+<ng-template #deleteWindow let-deleteModal>
+  <div class="modal-header">
+    <h4 class="modal-title">Удалить пользователя?</h4>
+    <button type="button" class="close" aria-label="Закрыть" (click)="deleteModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-center">
+      <p>Вы действительно хотите удалить эту запись?</p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="deleteUser(openedUser.id); deleteModal.close()">Удалить</button>
+    <button type="button" class="btn btn-outline-dark" (click)="deleteModal.close()">Закрыть</button>
   </div>
 </ng-template>

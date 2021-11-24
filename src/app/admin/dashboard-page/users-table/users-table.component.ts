@@ -75,8 +75,6 @@ export class UsersTableComponent implements OnInit {
   page: number = 1;
   pageSize: number = 5;
 
-
-
   constructor(
     private http: HttpClient,
     private auth: AuthService,
@@ -157,7 +155,6 @@ export class UsersTableComponent implements OnInit {
       })
   }
 
-
   submitUserModal() {
     const formData = <UserTable>{...this.userForm.value}
     // Если меняется пароль пользователя - перезаписываем данные пользователя безусловно
@@ -203,5 +200,17 @@ export class UsersTableComponent implements OnInit {
 
   openAdd(userAdd: TemplateRef<any>) {
     this.modalService.open(userAdd, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+  }
+
+  openDeleteModal(deleteWindow: TemplateRef<any>) {
+    this.modalService.open(deleteWindow, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+  }
+
+  deleteUser(id: number) {
+    this.http.delete(`http://back-specporj.local:8000/api/user/${id}`, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(() => {
+        this.reloadUsers()
+        this.userForm.reset()
+      })
   }
 }

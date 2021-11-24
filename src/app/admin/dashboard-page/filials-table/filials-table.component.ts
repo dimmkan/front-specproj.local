@@ -150,4 +150,16 @@ export class FilialsTableComponent implements OnInit {
         this.filialAddForm.reset()
       })
   }
+
+  openDeleteModal(deleteWindow: TemplateRef<any>) {
+    this.modalService.open(deleteWindow, {size: 'lg'})
+  }
+
+  deleteFilial(id: number) {
+    this.http.delete(`http://back-specporj.local:8000/api/filial/${id}`, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(() => {
+        this.reloadFilials()
+        this.filialForm.reset()
+      })
+  }
 }

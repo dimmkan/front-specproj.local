@@ -1,0 +1,209 @@
+<div class="prettyfire">
+  <div class="offset-11 mb-1">
+    <button type="button" class="btn btn-info" (click)="openAdd(addM)">Добавить доктора</button>
+  </div>
+  <table class="table table-bordered">
+    <thead class="thead-light">
+    <tr>
+      <th scope="col" sortable="id" (sort)="onSort($event)">ID</th>
+      <th scope="col" sortable="lastName" (sort)="onSort($event)">Фамилия</th>
+      <th scope="col" sortable="firstName" (sort)="onSort($event)">Имя</th>
+      <th scope="col" sortable="middleName" (sort)="onSort($event)">Отчество</th>
+      <th scope="col" sortable="specification" (sort)="onSort($event)">Специализация</th>
+      <th scope="col" sortable="filialID" (sort)="onSort($event)">Филиал</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="table-info" *ngFor="let doctor of refresh">
+      <th class="btn-link" style="cursor: pointer" scope="row" (click)="openDoctor(doctor.id, doctorM)">{{ doctor.id }}</th>
+      <td>{{ doctor.lastName }}</td>
+      <td>{{ doctor.firstName }}</td>
+      <td>{{ doctor.middleName }}</td>
+      <td>{{ doctor.specification }}</td>
+      <td class="btn-link" style="cursor: pointer" scope="row" (click)="openFilial(doctor.filialID, filialM)">{{ doctor.filialID }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+                    (pageChange)="refreshDoctors()">
+    </ngb-pagination>
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshDoctors()">
+      <option [ngValue]="5">На странице: 5</option>
+      <option [ngValue]="10">На странице: 10</option>
+      <option [ngValue]="25">На странице: 25</option>
+    </select>
+  </div>
+</div>
+
+<ng-template #doctorM let-doctorModal>
+  <div class="modal-header">
+    <h4 class="modal-title">Карточка доктора</h4>
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="doctorModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="doctorForm" (ngSubmit)="submitDoctorModal(); doctorModal.close()">
+      <div class="form-group row">
+        <label for="doctor_id" class="col-sm-3 col-form-label">ID доктора</label>
+        <div class="col-sm-9">
+          <input formControlName="doctor_id" type="text" class="form-control" id="doctor_id" placeholder="ID доктора" readonly
+                 [ngModel]="openedDoctor.id">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="doctor_lastName" class="col-sm-3 col-form-label">Фамилия</label>
+        <div class="col-sm-9">
+          <input formControlName="doctor_lastName" type="text" class="form-control" id="doctor_lastName" placeholder="Фамилия" readonly
+                 [ngModel]="openedDoctor.lastName">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="doctor_firstName" class="col-sm-3 col-form-label">Имя</label>
+        <div class="col-sm-9">
+          <input formControlName="doctor_firstName" type="text" class="form-control" id="doctor_firstName" placeholder="Имя" readonly
+                 [ngModel]="openedDoctor.firstName">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="doctor_middleName" class="col-sm-3 col-form-label">Отчество</label>
+        <div class="col-sm-9">
+          <input formControlName="doctor_middleName" type="text" class="form-control" id="doctor_middleName" placeholder="Отчество" readonly
+                 [ngModel]="openedDoctor.middleName">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="doctor_specification" class="col-sm-3 col-form-label">Специализация</label>
+        <div class="col-sm-9">
+          <input formControlName="doctor_specification" type="text" class="form-control" id="doctor_specification" placeholder="Специализация" readonly
+                 [ngModel]="openedDoctor.id">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="doctor_filialID" class="col-sm-3 col-form-label">Филиал доктора</label>
+        <div class="col-sm-9">
+          <select formControlName="doctor_filialID" id="doctor_filialID" class="custom-select" style="width: auto"
+                  [ngModel]="openedDoctor.filialID">
+            <option *ngFor="let fil of filials" [ngValue]="fil.id">{{fil.description}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="doctor_imageURI" class="col-sm-3 col-form-label">Картинка</label>
+        <div class="col-sm-9">
+          <input formControlName="doctor_imageURI" type="text" class="form-control" id="doctor_imageURI" placeholder="Картинка" readonly
+                 [ngModel]="openedDoctor.imageURI">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="openDeleteModal(deleteWindow); doctorModal.close()">Удалить</button>
+        <button type="submit" class="btn btn-outline-dark" [disabled]="doctorForm.invalid">Сохранить филиал</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #addM let-filialAdd>
+  <div class="modal-header">
+    <h4 class="modal-title">Карточка филиала</h4>
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="filialAdd.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="doctorAddForm" (ngSubmit)="addDoctorModal(); filialAdd.close()">
+      <div class="form-group row">
+        <label for="add_description" class="col-sm-3 col-form-label">Наименование филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="add_description" class="form-control" id="add_description" placeholder="Наименование филиала">
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="add_address" class="col-sm-3 col-form-label">Адрес филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="add_address" class="form-control" id="add_address" placeholder="Адрес филиала">
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="add_city" class="col-sm-3 col-form-label">Город филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="add_city" class="form-control" id="add_city" placeholder="Город филиала">
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" [disabled]="doctorAddForm.invalid">Добавить филиал</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #filialM let-filialModal>
+  <div class="modal-header">
+    <h4 class="modal-title">Карточка филиала</h4>
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="filialModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="filialForm">
+      <div class="form-group row">
+        <label for="filial_id" class="col-sm-3 col-form-label">ID филиала</label>
+        <div class="col-sm-9">
+          <input formControlName="filial_id" type="text" class="form-control" id="filial_id" placeholder="ID филиала" readonly
+                 [ngModel]="openedFilial.id">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="filial_description" class="col-sm-3 col-form-label">Наименование филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="filial_description" class="form-control" id="filial_description" placeholder="Наименование филиала"
+                    [ngModel]="openedFilial.description" readonly>
+
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="filial_address" class="col-sm-3 col-form-label">Адрес филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="filial_address" class="form-control" id="filial_address" placeholder="Адрес филиала"
+                    [ngModel]="openedFilial.address" readonly>
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="filial_city" class="col-sm-3 col-form-label">Город филиала</label>
+        <div class="col-sm-9">
+          <textarea formControlName="filial_city" class="form-control" id="filial_city" placeholder="Город филиала"
+                    [ngModel]="openedFilial.city" readonly>
+
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="filialModal.close()" [disabled]="filialForm.invalid">Закрыть карточку</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #deleteWindow let-deleteModal>
+  <div class="modal-header">
+    <h4 class="modal-title">Удалить пользователя?</h4>
+    <button type="button" class="close" aria-label="Закрыть" (click)="deleteModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-center">
+      <p>Вы действительно хотите удалить эту запись?</p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="deleteDoctor(openedDoctor.id); deleteModal.close()">Удалить</button>
+    <button type="button" class="btn btn-outline-dark" (click)="deleteModal.close()">Закрыть</button>
+  </div>
+</ng-template>

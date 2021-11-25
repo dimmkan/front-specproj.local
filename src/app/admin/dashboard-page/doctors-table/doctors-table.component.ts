@@ -72,6 +72,7 @@ export class DoctorsTableComponent implements OnInit {
     private modalService: NgbModal,
   ) {
     this.reloadDoctors()
+    this.loadFilials()
   }
 
   ngOnInit(): void {
@@ -109,6 +110,14 @@ export class DoctorsTableComponent implements OnInit {
 
   refreshDoctors() {
     this.refresh = [...this.doctors].slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize)
+  }
+
+  private loadFilials() {
+    this.http.get<FilialTable[]>('http://back-specporj.local:8000/api/filial', {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(response => {
+        //@ts-ignore
+        this.filials = response.filials
+      })
   }
 
   openAdd(addM: TemplateRef<any>) {

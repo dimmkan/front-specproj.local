@@ -15,12 +15,14 @@
     </thead>
     <tbody>
     <tr class="table-info" *ngFor="let doctor of refresh">
-      <th class="btn-link" style="cursor: pointer" scope="row" (click)="openDoctor(doctor.id, doctorM)">{{ doctor.id }}</th>
+      <th class="btn-link" style="cursor: pointer" scope="row"
+          (click)="openDoctor(doctor.id, doctorM)">{{ doctor.id }}</th>
       <td>{{ doctor.lastName }}</td>
       <td>{{ doctor.firstName }}</td>
       <td>{{ doctor.middleName }}</td>
       <td>{{ doctor.specification }}</td>
-      <td class="btn-link" style="cursor: pointer" scope="row" (click)="openFilial(doctor.filialID, filialM)">{{ doctor.filialID }}</td>
+      <td class="btn-link" style="cursor: pointer" scope="row"
+          (click)="openFilial(doctor.filialID, filialM)">{{ doctor.filialID }}</td>
     </tr>
     </tbody>
   </table>
@@ -48,36 +50,41 @@
       <div class="form-group row">
         <label for="doctor_id" class="col-sm-3 col-form-label">ID доктора</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_id" type="text" class="form-control" id="doctor_id" placeholder="ID доктора" readonly
+          <input formControlName="doctor_id" type="text" class="form-control" id="doctor_id" placeholder="ID доктора"
+                 readonly
                  [ngModel]="openedDoctor.id">
         </div>
       </div>
       <div class="form-group row">
         <label for="doctor_lastName" class="col-sm-3 col-form-label">Фамилия</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_lastName" type="text" class="form-control" id="doctor_lastName" placeholder="Фамилия" readonly
+          <input formControlName="doctor_lastName" type="text" class="form-control" id="doctor_lastName"
+                 placeholder="Фамилия" readonly
                  [ngModel]="openedDoctor.lastName">
         </div>
       </div>
       <div class="form-group row">
         <label for="doctor_firstName" class="col-sm-3 col-form-label">Имя</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_firstName" type="text" class="form-control" id="doctor_firstName" placeholder="Имя" readonly
+          <input formControlName="doctor_firstName" type="text" class="form-control" id="doctor_firstName"
+                 placeholder="Имя" readonly
                  [ngModel]="openedDoctor.firstName">
         </div>
       </div>
       <div class="form-group row">
         <label for="doctor_middleName" class="col-sm-3 col-form-label">Отчество</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_middleName" type="text" class="form-control" id="doctor_middleName" placeholder="Отчество" readonly
+          <input formControlName="doctor_middleName" type="text" class="form-control" id="doctor_middleName"
+                 placeholder="Отчество" readonly
                  [ngModel]="openedDoctor.middleName">
         </div>
       </div>
       <div class="form-group row">
         <label for="doctor_specification" class="col-sm-3 col-form-label">Специализация</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_specification" type="text" class="form-control" id="doctor_specification" placeholder="Специализация" readonly
-                 [ngModel]="openedDoctor.id">
+          <input formControlName="doctor_specification" type="text" class="form-control" id="doctor_specification"
+                 placeholder="Специализация" readonly
+                 [ngModel]="openedDoctor.specification">
         </div>
       </div>
       <div class="form-group row">
@@ -90,15 +97,25 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="doctor_imageURI" class="col-sm-3 col-form-label">Картинка</label>
-        <div class="col-sm-9">
-          <input formControlName="doctor_imageURI" type="text" class="form-control" id="doctor_imageURI" placeholder="Картинка" readonly
-                 [ngModel]="openedDoctor.imageURI">
+        <label class="col-sm-3 col-form-label">Картинка</label>
+        <div class="col-sm-6">
+          <input
+            style="display: none"
+            #fileInput
+            type="file" (change)="onFileSelected($event)" >
+          <label>{{selectedFile?.name}}</label>
+          <button type="button" class="btn btn-outline-dark" (click)="fileInput.click()">Выбрать</button>
+          <button type="button" class="btn btn-outline-dark" (click)="uploadImage(openedDoctor.id)">Загрузить</button>
+        </div>
+        <div class="col-sm-3">
+          <img src="{{openedDoctor.imageURI.replace('\\', '\/')}}" class="rounded float-right">
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-danger" (click)="openDeleteModal(deleteWindow); doctorModal.close()">Удалить</button>
-        <button type="submit" class="btn btn-outline-dark" [disabled]="doctorForm.invalid">Сохранить филиал</button>
+        <button type="button" class="btn btn-outline-danger"
+                (click)="openDeleteModal(deleteWindow); doctorModal.close()">Удалить
+        </button>
+        <button type="submit" class="btn btn-outline-dark" [disabled]="doctorForm.invalid">Сохранить доктора</button>
       </div>
     </form>
   </div>
@@ -116,7 +133,8 @@
       <div class="form-group row">
         <label for="add_description" class="col-sm-3 col-form-label">Наименование филиала</label>
         <div class="col-sm-9">
-          <textarea formControlName="add_description" class="form-control" id="add_description" placeholder="Наименование филиала">
+          <textarea formControlName="add_description" class="form-control" id="add_description"
+                    placeholder="Наименование филиала">
           </textarea>
         </div>
       </div>
@@ -153,14 +171,16 @@
       <div class="form-group row">
         <label for="filial_id" class="col-sm-3 col-form-label">ID филиала</label>
         <div class="col-sm-9">
-          <input formControlName="filial_id" type="text" class="form-control" id="filial_id" placeholder="ID филиала" readonly
+          <input formControlName="filial_id" type="text" class="form-control" id="filial_id" placeholder="ID филиала"
+                 readonly
                  [ngModel]="openedFilial.id">
         </div>
       </div>
       <div class="form-group row">
         <label for="filial_description" class="col-sm-3 col-form-label">Наименование филиала</label>
         <div class="col-sm-9">
-          <textarea formControlName="filial_description" class="form-control" id="filial_description" placeholder="Наименование филиала"
+          <textarea formControlName="filial_description" class="form-control" id="filial_description"
+                    placeholder="Наименование филиала"
                     [ngModel]="openedFilial.description" readonly>
 
           </textarea>
@@ -169,7 +189,8 @@
       <div class="form-group row">
         <label for="filial_address" class="col-sm-3 col-form-label">Адрес филиала</label>
         <div class="col-sm-9">
-          <textarea formControlName="filial_address" class="form-control" id="filial_address" placeholder="Адрес филиала"
+          <textarea formControlName="filial_address" class="form-control" id="filial_address"
+                    placeholder="Адрес филиала"
                     [ngModel]="openedFilial.address" readonly>
           </textarea>
         </div>
@@ -184,7 +205,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="filialModal.close()" [disabled]="filialForm.invalid">Закрыть карточку</button>
+        <button type="button" class="btn btn-outline-dark" (click)="filialModal.close()"
+                [disabled]="filialForm.invalid">Закрыть карточку
+        </button>
       </div>
     </form>
   </div>
@@ -203,7 +226,9 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="deleteDoctor(openedDoctor.id); deleteModal.close()">Удалить</button>
+    <button type="button" class="btn btn-outline-danger" (click)="deleteDoctor(openedDoctor.id); deleteModal.close()">
+      Удалить
+    </button>
     <button type="button" class="btn btn-outline-dark" (click)="deleteModal.close()">Закрыть</button>
   </div>
 </ng-template>

@@ -9,7 +9,7 @@ import {
   TemplateRef,
   ViewChildren
 } from '@angular/core';
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DoctorTable, FilialTable} from "../../shared/interfaces";
 import {FilialsTableSortableHeader} from "../filials-table/filials-table.component";
 import {HttpClient} from "@angular/common/http";
@@ -64,6 +64,7 @@ export class DoctorsTableComponent implements OnInit {
   filialForm: FormGroup;
   openedFilial: FilialTable;
   filials: FilialTable[] = [];
+  selectedFile: File = null;
 
 
   constructor(
@@ -76,9 +77,16 @@ export class DoctorsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.doctorAddForm = new FormGroup({
-
+    this.doctorForm = new FormGroup({
+      doctor_id: new FormControl(null, Validators.required),
+      doctor_lastName: new FormControl('', Validators.required),
+      doctor_firstName: new FormControl('', Validators.required),
+      doctor_middleName: new FormControl(''),
+      doctor_specification: new FormControl('', Validators.required),
+      doctor_filialID: new FormControl(null, Validators.required),
     })
+    this.filialForm = new FormGroup({})
+    this.doctorAddForm = new FormGroup({})
   }
 
   onSort({column, direction}: SortEvent) {
@@ -125,11 +133,16 @@ export class DoctorsTableComponent implements OnInit {
   }
 
   openDoctor(id: number, doctorM: TemplateRef<any>) {
-
+    this.http.get<FilialTable>(`http://back-specporj.local:8000/api/doctor/${id}`, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(response => {
+        //@ts-ignore
+        this.openedDoctor = response.doctor
+        this.modalService.open(doctorM, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      })
   }
 
   submitDoctorModal() {
-
+    const formData = <DoctorTable>{...this.doctorForm.value}
   }
 
   openDeleteModal(deleteWindow: TemplateRef<any>) {
@@ -151,5 +164,25 @@ export class DoctorsTableComponent implements OnInit {
         this.openedFilial = response.filial
         this.modalService.open(filialM, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       })
+  }
+
+  uploadImage(id: number) {
+    const fd = new FormData();
+
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+
+    this.http.post(`http://back-specporj.local:8000/api/doctor/${id}/uploadImage`, fd, {
+      headers: {
+        'Authorization': 'Bearer ' + this.auth.token,
+      }
+    })
+      .subscribe(res => {
+        //@ts-ignore
+        this.openedDoctor.imageURI = res.filepath
+      });
+  }
+
+  onFileSelected($event: any) {
+    this.selectedFile = <File>$event.target.files[0];
   }
 }

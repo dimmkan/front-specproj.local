@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DoctorTable, FilialTable} from "../../shared/interfaces";
-import {FilialsTableSortableHeader} from "../filials-table/filials-table.component";
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../shared/services/auth.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -78,15 +77,26 @@ export class DoctorsTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.doctorForm = new FormGroup({
-      doctor_id: new FormControl(null, Validators.required),
-      doctor_lastName: new FormControl('', Validators.required),
-      doctor_firstName: new FormControl('', Validators.required),
-      doctor_middleName: new FormControl(''),
-      doctor_specification: new FormControl('', Validators.required),
-      doctor_filialID: new FormControl(null, Validators.required),
+      id: new FormControl(null, Validators.required),
+      lastName: new FormControl('', Validators.required),
+      firstName: new FormControl('', Validators.required),
+      middleName: new FormControl(''),
+      specification: new FormControl('', Validators.required),
+      filialID: new FormControl('', Validators.required),
     })
-    this.filialForm = new FormGroup({})
-    this.doctorAddForm = new FormGroup({})
+    this.filialForm = new FormGroup({
+      filial_id: new FormControl(null, Validators.required),
+      filial_description: new FormControl('', Validators.required),
+      filial_address: new FormControl('', Validators.required),
+      filial_city: new FormControl('', Validators.required),
+    })
+    this.doctorAddForm = new FormGroup({
+      add_lastName: new FormControl('', Validators.required),
+      add_firstName: new FormControl('', Validators.required),
+      add_middleName: new FormControl('', Validators.required),
+      add_specification: new FormControl('', Validators.required),
+      add_filialID: new FormControl(null, Validators.required),
+    })
   }
 
   onSort({column, direction}: SortEvent) {
@@ -129,7 +139,7 @@ export class DoctorsTableComponent implements OnInit {
   }
 
   openAdd(addM: TemplateRef<any>) {
-
+    this.modalService.open(addM, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
   }
 
   openDoctor(id: number, doctorM: TemplateRef<any>) {
@@ -143,18 +153,38 @@ export class DoctorsTableComponent implements OnInit {
 
   submitDoctorModal() {
     const formData = <DoctorTable>{...this.doctorForm.value}
+    this.http.put(`http://back-specporj.local:8000/api/doctor/${formData.id}`, formData, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(() => {
+        this.reloadDoctors()
+        this.doctorForm.reset()
+      })
   }
 
   openDeleteModal(deleteWindow: TemplateRef<any>) {
-
+    this.modalService.open(deleteWindow, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
   }
 
   addDoctorModal() {
-
+    const formData = {...this.doctorAddForm.value}
+    this.http.post(`http://back-specporj.local:8000/api/doctor`, {
+      firstName: formData.add_firstName,
+      middleName: formData.add_middleName,
+      lastName: formData.add_lastName,
+      specification: formData.add_specification,
+      filialID: formData.add_filialID,
+    },{headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(() => {
+        this.reloadDoctors()
+        this.doctorAddForm.reset()
+      })
   }
 
   deleteDoctor(id: number) {
-
+    this.http.delete(`http://back-specporj.local:8000/api/doctor/${id}`, {headers: {'Authorization': 'Bearer ' + this.auth.token}})
+      .subscribe(() => {
+        this.reloadDoctors()
+        this.doctorForm.reset()
+      })
   }
 
   openFilial(filialID: number, filialM: TemplateRef<any>) {

@@ -48,45 +48,45 @@
   <div class="modal-body">
     <form [formGroup]="doctorForm" (ngSubmit)="submitDoctorModal(); doctorModal.close()">
       <div class="form-group row">
-        <label for="doctor_id" class="col-sm-3 col-form-label">ID доктора</label>
+        <label for="id" class="col-sm-3 col-form-label">ID доктора</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_id" type="text" class="form-control" id="doctor_id" placeholder="ID доктора"
+          <input formControlName="id" type="text" class="form-control" id="id" placeholder="ID доктора"
                  readonly
                  [ngModel]="openedDoctor.id">
         </div>
       </div>
       <div class="form-group row">
-        <label for="doctor_lastName" class="col-sm-3 col-form-label">Фамилия</label>
+        <label for="lastName" class="col-sm-3 col-form-label">Фамилия</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_lastName" type="text" class="form-control" id="doctor_lastName"
+          <input formControlName="lastName" type="text" class="form-control" id="lastName"
                  placeholder="Фамилия" [ngModel]="openedDoctor.lastName">
         </div>
       </div>
       <div class="form-group row">
-        <label for="doctor_firstName" class="col-sm-3 col-form-label">Имя</label>
+        <label for="firstName" class="col-sm-3 col-form-label">Имя</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_firstName" type="text" class="form-control" id="doctor_firstName"
+          <input formControlName="firstName" type="text" class="form-control" id="firstName"
                  placeholder="Имя" [ngModel]="openedDoctor.firstName">
         </div>
       </div>
       <div class="form-group row">
-        <label for="doctor_middleName" class="col-sm-3 col-form-label">Отчество</label>
+        <label for="middleName" class="col-sm-3 col-form-label">Отчество</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_middleName" type="text" class="form-control" id="doctor_middleName"
+          <input formControlName="middleName" type="text" class="form-control" id="middleName"
                  placeholder="Отчество" [ngModel]="openedDoctor.middleName">
         </div>
       </div>
       <div class="form-group row">
-        <label for="doctor_specification" class="col-sm-3 col-form-label">Специализация</label>
+        <label for="specification" class="col-sm-3 col-form-label">Специализация</label>
         <div class="col-sm-9">
-          <input formControlName="doctor_specification" type="text" class="form-control" id="doctor_specification"
+          <input formControlName="specification" type="text" class="form-control" id="specification"
                  placeholder="Специализация" [ngModel]="openedDoctor.specification">
         </div>
       </div>
       <div class="form-group row">
-        <label for="doctor_filialID" class="col-sm-3 col-form-label">Филиал доктора</label>
+        <label for="filialID" class="col-sm-3 col-form-label">Филиал доктора</label>
         <div class="col-sm-9">
-          <select formControlName="doctor_filialID" id="doctor_filialID" class="custom-select" style="width: auto"
+          <select formControlName="filialID" id="filialID" class="custom-select" style="width: auto"
                   [ngModel]="openedDoctor.filialID">
             <option *ngFor="let fil of filials" [ngValue]="fil.id">{{fil.description}}</option>
           </select>
@@ -98,13 +98,13 @@
           <input
             style="display: none"
             #fileInput
-            type="file" (change)="onFileSelected($event)" >
+            type="file" (change)="onFileSelected($event)">
           <label>{{selectedFile?.name}}</label>
           <button type="button" class="btn btn-outline-dark" (click)="fileInput.click()">Выбрать</button>
           <button type="button" class="btn btn-outline-dark" (click)="uploadImage(openedDoctor.id)">Загрузить</button>
         </div>
         <div class="col-sm-3">
-          <img src="{{openedDoctor.imageURI.replace('\\', '\/')}}" class="rounded float-right">
+          <img src="{{openedDoctor.imageURI ? openedDoctor.imageURI.replace('\\', '\/') : ''}}" class="rounded float-right">
         </div>
       </div>
       <div class="modal-footer">
@@ -117,39 +117,53 @@
   </div>
 </ng-template>
 
-<ng-template #addM let-filialAdd>
+<ng-template #addM let-doctorAdd>
   <div class="modal-header">
-    <h4 class="modal-title">Карточка филиала</h4>
-    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="filialAdd.dismiss()">
+    <h4 class="modal-title">Карточка доктора</h4>
+    <button type="button" style="border-radius: .5rem" aria-label="Close" (click)="doctorAdd.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="doctorAddForm" (ngSubmit)="addDoctorModal(); filialAdd.close()">
+    <form [formGroup]="doctorAddForm" (ngSubmit)="addDoctorModal(); doctorAdd.close()">
       <div class="form-group row">
-        <label for="add_description" class="col-sm-3 col-form-label">Наименование филиала</label>
+        <label for="add_lastName" class="col-sm-3 col-form-label">Фамилия</label>
         <div class="col-sm-9">
-          <textarea formControlName="add_description" class="form-control" id="add_description"
-                    placeholder="Наименование филиала">
-          </textarea>
+          <input formControlName="add_lastName" type="text" class="form-control" id="add_lastName"
+                 placeholder="Фамилия">
         </div>
       </div>
       <div class="form-group row">
-        <label for="add_address" class="col-sm-3 col-form-label">Адрес филиала</label>
+        <label for="add_firstName" class="col-sm-3 col-form-label">Имя</label>
         <div class="col-sm-9">
-          <textarea formControlName="add_address" class="form-control" id="add_address" placeholder="Адрес филиала">
-          </textarea>
+          <input formControlName="add_firstName" type="text" class="form-control" id="add_firstName"
+                 placeholder="Имя">
         </div>
       </div>
       <div class="form-group row">
-        <label for="add_city" class="col-sm-3 col-form-label">Город филиала</label>
+        <label for="add_middleName" class="col-sm-3 col-form-label">Отчество</label>
         <div class="col-sm-9">
-          <textarea formControlName="add_city" class="form-control" id="add_city" placeholder="Город филиала">
-          </textarea>
+          <input formControlName="add_middleName" type="text" class="form-control" id="add_middleName"
+                 placeholder="Отчество">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="add_specification" class="col-sm-3 col-form-label">Специализация</label>
+        <div class="col-sm-9">
+          <input formControlName="add_specification" type="text" class="form-control" id="add_specification"
+                 placeholder="Специализация">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="add_filialID" class="col-sm-3 col-form-label">Филиал доктора</label>
+        <div class="col-sm-9">
+          <select formControlName="add_filialID" id="add_filialID" class="custom-select" style="width: auto">
+            <option *ngFor="let filial of filials" [ngValue]="filial.id">{{filial.description}}</option>
+          </select>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-dark" [disabled]="doctorAddForm.invalid">Добавить филиал</button>
+        <button type="submit" class="btn btn-outline-dark" [disabled]="doctorAddForm.invalid">Добавить доктора</button>
       </div>
     </form>
   </div>
